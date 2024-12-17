@@ -1,4 +1,5 @@
 import { Gameboard } from "./Gameboard.js";
+import { Ship } from "./ship.js";
 
 test("placing a ship", () => {
   const board = Gameboard();
@@ -31,10 +32,19 @@ test("placing a ship", () => {
 });
 
 test("should be a empty", () => {
-    const board = Gameboard();
-    let ship = "a ship";
-    board.placeShip("test", 4,2)
-    expect(() => board.placeShip(ship, 4, 2)).toThrow("column already used");
-    expect(() => board.placeShip(ship, 4, 3)).toThrow("row already used");
-  });
-  
+  const board = Gameboard();
+  let ship = "a ship";
+  board.placeShip("test", 4, 2);
+  expect(() => board.placeShip(ship, 4, 2)).toThrow("column already used");
+  expect(() => board.placeShip(ship, 4, 3)).toThrow("row already used");
+});
+
+test("receive an attack", () => {
+  const board = Gameboard();
+  let ship = Ship();
+  ship.setLenght(2);
+
+  board.placeShip(ship, 4, 2);
+  expect(board.receiveAttack(ship, 4, 2)).toBe(1);
+  expect(board.receiveAttack(ship, 4, 2)).toBe(2);
+});

@@ -7,6 +7,12 @@ function Gameboard() {
   let usedColumn = [];
 
   const placeShip = (ship, x, y) => {
+    checkIfempty(x, y);
+    board[x][y] = ship;
+    return board;
+  };
+
+  const checkIfempty = (x, y) => {
     if (usedColumn.includes(y)) {
       throw new Error("column already used");
     }
@@ -15,12 +21,13 @@ function Gameboard() {
     }
     usedRow.push(x);
     usedColumn.push(y);
-    board[x][y] = ship;
-    console.log(board);
-    return board;
   };
 
-  return { placeShip };
+  const receiveAttack = (ship, x,y) => {
+    return board[x][y].hit();
+  }
+
+  return { placeShip, receiveAttack };
 }
 
 export { Gameboard };
