@@ -1,4 +1,4 @@
-function ship() {
+function Ship() {
   let lenght = 0;
   let hits = 0;
 
@@ -14,4 +14,4 @@ function ship() {
   return { setLenght, getLenght, hit, isSunk };
 }
 
-export { ship };
+export { Ship };
