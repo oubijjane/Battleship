@@ -11,7 +11,7 @@ function Gameboard() {
   const createShips = () => {
     for (let i = 0; i < 4; i++) {
       let ship = Ship();
-      ship.setLenght(1)
+      ship.setLenght(1);
       ships.push(ship);
     }
     for (let i = 0; i < 3; i++) {
@@ -32,20 +32,26 @@ function Gameboard() {
   const getShips = () => [...ships];
 
   const placeShip = (ship, x, y) => {
-    checkIfempty(x, y);
-    board[x][y] = ship;
+    checkIfempty(ship, x, y);
+    for (let i = 0; i < ship.getLenght(); i++) {
+      board[x][y] = ship;
+      y++;
+    }
     return board;
   };
 
-  const checkIfempty = (x, y) => {
-    if (usedColumn.includes(y)) {
-      throw new Error("column already used");
+  const checkIfempty = (ship, x, y) => {
+    if (y + ship.getLenght() > board.length - 1) {
+      throw new Error("no enough space");
     }
-    if (usedRow.includes(x)) {
-      throw new Error("row already used");
+    if (usedColumn.includes(y) && usedRow.includes(x)) {
+      throw new Error("cell already used");
     }
     usedRow.push(x);
-    usedColumn.push(y);
+    for (let i = 0; i < ship.getLenght(); i++) {
+      usedColumn.push(y);
+      y++;
+    }
   };
 
   const receiveAttack = (x, y) => {
@@ -78,13 +84,13 @@ function Gameboard() {
     return false;
   };
   const allShipsSunks = () => {
-    if(ships.some(ship => !ship.isSunk())) {
-        return false;
+    if (ships.some((ship) => !ship.isSunk())) {
+      return false;
     }
     return true;
-  }
-
-  return { placeShip, receiveAttack,getShips, allShipsSunks};
+  };
+  const getBoard = () => [...board];
+  return { placeShip, receiveAttack, getShips, allShipsSunks, getBoard };
 }
 
 export { Gameboard };

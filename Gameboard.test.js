@@ -2,8 +2,10 @@ import { Gameboard } from "./Gameboard.js";
 import { Ship } from "./ship.js";
 
 test("placing a ship", () => {
+  
   const board = Gameboard();
-  let ship = "a ship";
+  let ship = Ship();
+  ship.setLenght(1);
   expect(board.placeShip(ship, 9, 5)).toEqual([
     [null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null],
@@ -14,11 +16,11 @@ test("placing a ship", () => {
     [null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, "a ship", null, null, null, null],
+    [null, null, null, null, null, ship, null, null, null, null],
   ]);
-
+  ship.setLenght(2);
   expect(board.placeShip(ship, 0, 0)).toEqual([
-    ["a ship", null, null, null, null, null, null, null, null, null],
+    [ship, ship, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null],
@@ -27,16 +29,26 @@ test("placing a ship", () => {
     [null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, "a ship", null, null, null, null],
+    [null, null, null, null, null, ship, null, null, null, null],
   ]);
 });
 
 test("should be a empty", () => {
   const board = Gameboard();
-  let ship = "a ship";
-  board.placeShip("test", 4, 2);
-  expect(() => board.placeShip(ship, 4, 2)).toThrow("column already used");
-  expect(() => board.placeShip(ship, 4, 3)).toThrow("row already used");
+  let ship = Ship();
+  ship.setLenght(2);
+  board.placeShip(ship, 2, 2);
+  board.placeShip(ship, 5, 2);
+  expect(() => board.placeShip(ship, 2, 2)).toThrow("cell already used");
+  expect(() => board.placeShip(ship, 5, 2)).toThrow("cell already used");
+});
+
+test("no enough space", () => {
+  const board = Gameboard();
+  let ship = Ship();
+  ship.setLenght(1);
+  expect(() => board.placeShip(ship, 2, 9)).toThrow("no enough space");
+  
 });
 
 test("receive an attack", () => {
