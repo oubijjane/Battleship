@@ -1,23 +1,31 @@
 function player() {
   const board = Gameboard();
+  let turn = true;
+  //default positions
+  let positions = [
+    [0, 6],
+    [1, 7],
+    [2, 3],
+    [2, 9],
+    [5, 4],
+    [6, 6],
+    [7, 2],
+    [8, 3],
+    [9, 5],
+    [0, 0],
+  ];
 
   const getBoard = () => board;
-
-  const place = () => {
-    board.placeShip(board.getShips()[0], 1, 1);
-    board.placeShip(board.getShips()[1], 2, 2);
-    board.placeShip(board.getShips()[2], 3, 3);
-    board.placeShip(board.getShips()[3], 4, 4);
-    board.placeShip(board.getShips()[4], 5, 5);
-    board.placeShip(board.getShips()[5], 6, 6);
-    board.placeShip(board.getShips()[6], 7, 2);
-    board.placeShip(board.getShips()[7], 8, 3);
-    board.placeShip(board.getShips()[8], 9, 5);
-    board.placeShip(board.getShips()[9], 0, 0); 
-  };
-
-  return { getBoard, place };
+  const place = ()=> {
+    for(let i = 0; i < positions.length; i++) {
+      board.placeShip(board.getShips()[i], positions[i][0], positions[i][1]);
+    }
+  }
+  const setPositions = (values) => positions = values;
+  const takeTurn = () => (turn = true);
+  const endTurn = () => (turn = false);
+  const getTurn = () => turn;
+  return { getBoard, place, takeTurn, endTurn, getTurn, setPositions };
 }
-
 import { Gameboard } from "./Gameboard.js";
 export { player };

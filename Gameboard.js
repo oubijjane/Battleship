@@ -41,7 +41,7 @@ function Gameboard() {
   };
 
   const checkIfempty = (ship, x, y) => {
-    if (y + ship.getLenght() > board.length - 1) {
+    if (y + ship.getLenght() > board.length) {
       throw new Error("no enough space");
     }
     if (usedColumn.includes(y) && usedRow.includes(x)) {
