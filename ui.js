@@ -19,7 +19,7 @@ function board() {
   player2.endTurn();
   Createboard(player1, divs[0], "po");
   Createboard(player2, divs[1], "pt");
-  eventsTwoPLayer(player1, player2, divs[0], divs[1]);
+  eventsOnePLayer(player1, player2, divs[0], divs[1]);
 }
 function placeShipInTheBoard(ships, x, y) {
   if (ships[x][y]) {
@@ -53,8 +53,6 @@ function eventsTwoPLayer(player1, player2, board1, board2) {
         let x = e.target.id.charAt(2);
         let y = e.target.id.charAt(3);
         let ship = player1.getBoard().getBoard()[x][y];
-        console.log(ship);
-        console.log(x);
         player1.endTurn();
         player2.takeTurn();
 
@@ -100,6 +98,72 @@ function eventsTwoPLayer(player1, player2, board1, board2) {
           board1.style.backgroundColor = "white";
         }
         e.target.className = "destroyed";
+      }
+    }
+  });
+}
+function eventsOnePLayer(player1, player2, board1, board2) {
+  let attacking = "";
+  board1.addEventListener("click", (e) => {
+    if (e.target.classList.contains("cell")) {
+      if (player1.getTurn()) {
+        let x = e.target.id.charAt(2);
+        let y = e.target.id.charAt(3);
+        let ship = player1.getBoard().getBoard()[x][y];
+        player1.endTurn();
+        attacking = true;
+        if (ship) {
+          e.target.style.backgroundColor = "yellow";
+          player1.getBoard().receiveAttack(x, y);
+        } else {
+          e.target.style.backgroundColor = "red";
+        }
+        if (player1.getBoard().allShipsSunks()) {
+          board1.style.backgroundColor = "red";
+          board2.style.backgroundColor = "blue";
+          player2.endTurn();
+        } else {
+          board1.style.backgroundColor = "grey";
+          board2.style.backgroundColor = "white";
+        }
+        e.target.className = "destroyed";
+
+        //cpu
+        while (attacking) {
+          let x = Math.floor(Math.random() * 10);
+          let y = Math.floor(Math.random() * 10);
+          console.log(x)
+          console.log(y)
+          let ship = player2.getBoard().getBoard()[x][y];
+          const cell = document.querySelector("#pt" + x + y);
+          if (cell.className === "destroyed") {
+            console.log("inside the first if statment");
+          } else {
+            if (ship) {
+              console.log("inside the second if statment");
+              player2.getBoard().receiveAttack(x, y);
+              cell.style.backgroundColor = "yellow";
+              cell.className = "destroyed";
+              attacking = false;
+            } else {
+              console.log("inside the first else statment");
+              cell.style.backgroundColor = "red";
+              cell.className = "destroyed";
+              attacking = false;
+            }
+            if (player2.getBoard().allShipsSunks()) {
+              console.log("this should not happen at all lllllllllllllll");
+              board2.style.backgroundColor = "red";
+              board1.style.backgroundColor = "blue";
+              attacking = false;
+            } else {
+              console.log("inside the second else statment");
+              board2.style.backgroundColor = "grey";
+              board1.style.backgroundColor = "white";
+              player1.takeTurn();
+            }
+          }
+        }
       }
     }
   });

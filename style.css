@@ -4,6 +4,11 @@
     border: 1px solid black;
     
 }
+.destroyed {
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;  
+}
 .board {
     border: 1px solid black;
     display: grid;
