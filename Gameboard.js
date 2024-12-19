@@ -7,7 +7,7 @@ function Gameboard() {
   const attackedPositions = [];
   const missedAttack = [];
   const ships = [];
-
+  
   const createShips = () => {
     for (let i = 0; i < 4; i++) {
       let ship = Ship();
