@@ -2,7 +2,7 @@
   "name": "battleship",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
+  "type": "commonjs",
   "main": "ship.js",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"

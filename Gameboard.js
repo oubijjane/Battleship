@@ -2,12 +2,14 @@ function Gameboard() {
   const board = Array(10)
     .fill(null)
     .map(() => new Array(10).fill(null));
-  const usedRow = [];
+  const usedRow =Array(10)
+  .fill(null)
+  .map(() => new Array(10).fill(false));
   const usedColumn = [];
   const attackedPositions = [];
   const missedAttack = [];
   const ships = [];
-  
+
   const createShips = () => {
     for (let i = 0; i < 4; i++) {
       let ship = Ship();
@@ -42,14 +44,16 @@ function Gameboard() {
 
   const checkIfempty = (ship, x, y) => {
     if (y + ship.getLenght() > board.length) {
-      throw new Error("no enough space");
+      throw new Error("no enough space" + "x: " + x + " y: " + y);
     }
-    if (usedColumn.includes(y) && usedRow.includes(x)) {
-      throw new Error("cell already used");
-    }
-    usedRow.push(x);
     for (let i = 0; i < ship.getLenght(); i++) {
-      usedColumn.push(y);
+      if (usedRow[x][y]) {
+        throw new Error("cell already used " + "x: " + x + " y: " + y);
+      }
+      y++;
+    }
+    for (let i = 0; i < ship.getLenght(); i++) {
+      usedRow[x][y] = true;
       y++;
     }
   };

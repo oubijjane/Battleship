@@ -39,15 +39,15 @@ test("should be a empty", () => {
   ship.setLenght(2);
   board.placeShip(ship, 2, 2);
   board.placeShip(ship, 5, 2);
-  expect(() => board.placeShip(ship, 2, 2)).toThrow("cell already used");
-  expect(() => board.placeShip(ship, 5, 2)).toThrow("cell already used");
+  expect(() => board.placeShip(ship, 2, 2)).toThrow("cell already used " + "x: " + 2 + " y: " + 2);
+  expect(() => board.placeShip(ship, 5, 2)).toThrow("cell already used " + "x: " + 5 + " y: " + 2);
 });
 
 test("no enough space", () => {
   const board = Gameboard();
   let ship = Ship();
-  ship.setLenght(1);
-  expect(() => board.placeShip(ship, 2, 9)).toThrow("no enough space");
+  ship.setLenght(2);
+  expect(() => board.placeShip(ship, 2, 9)).toThrow("no enough space"+ "x: " + 2 + " y: " + 9);
   
 });
 

@@ -2,18 +2,8 @@ function board() {
   let divs = document.querySelectorAll(".board");
   const player1 = player();
   const player2 = player();
-  player2.setPositions([
-    [0, 6],
-    [1, 7],
-    [2, 3],
-    [2, 9],
-    [5, 4],
-    [6, 6],
-    [7, 2],
-    [8, 3],
-    [9, 5],
-    [1, 0],
-  ]);
+  player1.setPositions(selectRandomPosition());
+  player2.setPositions(selectRandomPosition());
   player1.place();
   player2.place();
   player2.endTurn();
@@ -40,7 +30,7 @@ function Createboard(player1, element, id) {
     }
     cell.id = id + x + y;
     if (placeShipInTheBoard(shipsPostision, x, y)) {
-      //cell.style.backgroundColor = "green";
+      cell.style.backgroundColor = "green";
     }
     y++;
     element.appendChild(cell);
@@ -132,8 +122,8 @@ function eventsOnePLayer(player1, player2, board1, board2) {
         while (attacking) {
           let x = Math.floor(Math.random() * 10);
           let y = Math.floor(Math.random() * 10);
-          console.log(x)
-          console.log(y)
+          console.log(x);
+          console.log(y);
           let ship = player2.getBoard().getBoard()[x][y];
           const cell = document.querySelector("#pt" + x + y);
           if (cell.className === "destroyed") {
@@ -167,6 +157,60 @@ function eventsOnePLayer(player1, player2, board1, board2) {
       }
     }
   });
+}
+function selectRandomPosition() {
+  let positions = [];
+  positions.push([
+    [0, 6],
+    [1, 7],
+    [2, 3],
+    [2, 9],
+    [5, 4],
+    [6, 6],
+    [7, 2],
+    [8, 3],
+    [9, 5],
+    [1, 0],
+  ]);
+  positions.push([
+    [0, 4],
+    [0, 7],
+    [1, 3],
+    [2, 9],
+    [3, 4],
+    [0, 1],
+    [1, 0],
+    [5, 3],
+    [6, 3],
+    [9, 0],
+  ]);
+  positions.push([
+    [1, 4],
+    [1, 7],
+    [7, 3],
+    [8, 9],
+    [5, 5],
+    [9, 1],
+    [8, 0],
+    [5, 0],
+    [6, 5],
+    [7, 5],
+  ]);
+  positions.push([
+    [9, 4],
+    [9, 7],
+    [7, 3],
+    [8, 9],
+    [3, 4],
+    [5, 1],
+    [5, 5],
+    [1, 3],
+    [6, 3],
+    [4, 0],
+  ]);
+  const randomNumber = Math.floor(Math.random() * 3);
+
+  return positions[randomNumber];
 }
 board();
 import { player } from "./player.js";
