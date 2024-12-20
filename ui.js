@@ -1,5 +1,24 @@
-function board() {
-  let divs = document.querySelectorAll(".board");
+function board(mode) {
+  const divs = document.querySelector(".boards");
+  const container1 = document.createElement("div");
+  const container2 = document.createElement("div");
+
+  container1.className = "container";
+  container2.className = "container";
+
+  const p1 = document.createElement("p");
+  const p2 = document.createElement("p");
+  p1.textContent = "Player 2 board:";
+  p2.textContent = "Player 1 board:";
+
+  const board1 = document.createElement("div");
+  const board2 = document.createElement("div");
+  board1.className = "board";
+  board2.className = "board";
+  container1.append(p1, board1);
+  container2.append(p2, board2);
+  newGame(divs);
+  divs.append(container1, container2);
   const player1 = player();
   const player2 = player();
   player1.setPositions(selectRandomPosition());
@@ -7,9 +26,23 @@ function board() {
   player1.place();
   player2.place();
   player2.endTurn();
-  Createboard(player1, divs[0], "po");
-  Createboard(player2, divs[1], "pt");
-  eventsOnePLayer(player1, player2, divs[0], divs[1]);
+  Createboard(player1, document.querySelectorAll(".board")[0], "po");
+  Createboard(player2, document.querySelectorAll(".board")[1], "pt");
+  if (mode) {
+    eventsTwoPLayer(
+      player1,
+      player2,
+      document.querySelectorAll(".board")[0],
+      document.querySelectorAll(".board")[1]
+    );
+  } else {
+    eventsOnePLayer(
+      player1,
+      player2,
+      document.querySelectorAll(".board")[0],
+      document.querySelectorAll(".board")[1]
+    );
+  }
 }
 function placeShipInTheBoard(ships, x, y) {
   if (ships[x][y]) {
@@ -30,7 +63,7 @@ function Createboard(player1, element, id) {
     }
     cell.id = id + x + y;
     if (placeShipInTheBoard(shipsPostision, x, y)) {
-      cell.style.backgroundColor = "green";
+      //cell.style.backgroundColor = "green";
     }
     y++;
     element.appendChild(cell);
@@ -57,8 +90,8 @@ function eventsTwoPLayer(player1, player2, board1, board2) {
           board2.style.backgroundColor = "blue";
           player2.endTurn();
         } else {
-          board1.style.backgroundColor = "grey";
-          board2.style.backgroundColor = "white";
+          board1.style.backgroundColor = "rgba(128, 128, 128, 0.589)";
+          board2.style.backgroundColor = "rgba(255, 255, 255, 0.377)";
         }
         e.target.className = "destroyed";
       }
@@ -84,8 +117,8 @@ function eventsTwoPLayer(player1, player2, board1, board2) {
           board1.style.backgroundColor = "blue";
           player1.endTurn();
         } else {
-          board2.style.backgroundColor = "grey";
-          board1.style.backgroundColor = "white";
+          board2.style.backgroundColor = "rgba(128, 128, 128, 0.589)";
+          board1.style.backgroundColor = "rgba(255, 255, 255, 0.377)";
         }
         e.target.className = "destroyed";
       }
@@ -111,49 +144,44 @@ function eventsOnePLayer(player1, player2, board1, board2) {
         if (player1.getBoard().allShipsSunks()) {
           board1.style.backgroundColor = "red";
           board2.style.backgroundColor = "blue";
-          player2.endTurn();
+          attacking = false;
         } else {
-          board1.style.backgroundColor = "grey";
-          board2.style.backgroundColor = "white";
+          board1.style.backgroundColor = "rgba(128, 128, 128, 0.589)";
+          board2.style.backgroundColor = "rgba(255, 255, 255, 0.377)";
         }
         e.target.className = "destroyed";
 
         //cpu
-        while (attacking) {
-          let x = Math.floor(Math.random() * 10);
-          let y = Math.floor(Math.random() * 10);
-          console.log(x);
-          console.log(y);
-          let ship = player2.getBoard().getBoard()[x][y];
-          const cell = document.querySelector("#pt" + x + y);
-          if (cell.className === "destroyed") {
-            console.log("inside the first if statment");
-          } else {
-            if (ship) {
-              console.log("inside the second if statment");
-              player2.getBoard().receiveAttack(x, y);
-              cell.style.backgroundColor = "yellow";
-              cell.className = "destroyed";
-              attacking = false;
+        setTimeout(() => {
+          while (attacking) {
+            let x = Math.floor(Math.random() * 10);
+            let y = Math.floor(Math.random() * 10);
+            let ship = player2.getBoard().getBoard()[x][y];
+            const cell = document.querySelector("#pt" + x + y);
+            if (cell.className === "destroyed") {
             } else {
-              console.log("inside the first else statment");
-              cell.style.backgroundColor = "red";
-              cell.className = "destroyed";
-              attacking = false;
-            }
-            if (player2.getBoard().allShipsSunks()) {
-              console.log("this should not happen at all lllllllllllllll");
-              board2.style.backgroundColor = "red";
-              board1.style.backgroundColor = "blue";
-              attacking = false;
-            } else {
-              console.log("inside the second else statment");
-              board2.style.backgroundColor = "grey";
-              board1.style.backgroundColor = "white";
-              player1.takeTurn();
+              if (ship) {
+                player2.getBoard().receiveAttack(x, y);
+                cell.style.backgroundColor = "yellow";
+                cell.className = "destroyed";
+                attacking = false;
+              } else {
+                cell.style.backgroundColor = "red";
+                cell.className = "destroyed";
+                attacking = false;
+              }
+              if (player2.getBoard().allShipsSunks()) {
+                board2.style.backgroundColor = "red";
+                board1.style.backgroundColor = "blue";
+                attacking = false;
+              } else {
+                board2.style.backgroundColor = "grey";
+                board1.style.backgroundColor = "rgba(255, 255, 255, 0.377)";
+                player1.takeTurn();
+              }
             }
           }
-        }
+        }, 500);
       }
     }
   });
@@ -212,5 +240,43 @@ function selectRandomPosition() {
 
   return positions[randomNumber];
 }
-board();
+function options() {
+  const div = document.querySelector(".boards");
+  div.replaceChildren();
+  twoPlayer(div);
+  onePlayer(div);
+}
+function twoPlayer(element) {
+  const option = document.createElement("button");
+  option.textContent = "vs player";
+  option.className = "option";
+  element.appendChild(option);
+  option.addEventListener("click", () => {
+    board(true);
+    const buttons = document.querySelectorAll(".option");
+    buttons.forEach((button) => button.remove());
+  });
+}
+function onePlayer(element) {
+  const option = document.createElement("button");
+  option.textContent = "vs cpu";
+  option.className = "option";
+  element.appendChild(option);
+  option.addEventListener("click", () => {
+    board(false);
+    const buttons = document.querySelectorAll(".option");
+    buttons.forEach((button) => button.remove());
+  });
+}
+function newGame(element) {
+  const option = document.createElement("button");
+  option.textContent = "new game";
+  option.className = "newGame";
+  element.appendChild(option);
+  option.addEventListener("click", () => {
+    options();
+    option.remove();
+  });
+}
+options();
 import { player } from "./player.js";
